@@ -1,0 +1,5 @@
+DISPLAY_W = 480
+DISPLAY_H = 270
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
