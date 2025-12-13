@@ -1,4 +1,5 @@
 import pygame
+import os
 from constants import *
 
 class Menu():
@@ -31,10 +32,35 @@ class MainMenu(Menu):
             self.game.draw_text('Battle Quest', 20, DISPLAY_W / 2, DISPLAY_H / 2 - 20)
             self.game.draw_text('Press ENTER To Start', 10, DISPLAY_W / 2, DISPLAY_H / 2)
             self.blit_screen()
-            self.state = 'Start'
 
     def check_input(self):
         if self.game.START_KEY:
             if self.state == 'Start':
+                self.game.curr_menu = self.game.character_select
+            self.run_display = False
+
+class CharacterSelect(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = "CharacterSelect"
+        self.offset = -20
+        self.cursor_rect.midtop = (DISPLAY_W / 4 + self.offset, 40)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events()
+            self.check_input()
+            self.game.display.fill(BLACK)
+            self.game.draw_text('Character Select', 20, DISPLAY_W / 2, 10)
+            self.game.draw_text("Basic", 10, DISPLAY_W / 4, 40)
+            self.game.draw_image('basicPlayer.png', DISPLAY_W / 4, 70)
+            self.draw_cursor()
+            self.blit_screen()
+
+    def check_input(self):
+        if self.game.START_KEY:
+            if self.state == 'CharacterSelect':
                 self.game.playing = True
             self.run_display = False
+        

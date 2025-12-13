@@ -11,6 +11,7 @@ class Game():
         self.window = pygame.display.set_mode(((DISPLAY_W, DISPLAY_H)))
         self.font_name = pygame.font.get_default_font()
         self.main_menu = MainMenu(self)
+        self.character_select = CharacterSelect(self)
         self.curr_menu = self.main_menu
 
     def game_loop(self):
@@ -48,3 +49,10 @@ class Game():
         text_rect = text_surface.get_rect()
         text_rect.center = (x, y)
         self.display.blit(text_surface, text_rect)
+
+    def draw_image(self, png, x, y):
+        image_path = os.path.join('assets', png)
+        image = pygame.image.load(image_path).convert_alpha()
+        image_rect = image.get_rect()
+        image_rect.center = (x,y)
+        self.display.blit(image, image_rect)
