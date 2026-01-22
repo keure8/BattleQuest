@@ -17,14 +17,17 @@ class Game():
         self.load_assets()
         self.load_states()
         self.drawable = pygame.sprite.Group()
-        SquareShape.containers = (self.drawable,)
-        Player.containers = (self.drawable,)
+        self.updateable = pygame.sprite.Group()
+        self.solid = pygame.sprite.Group()
+        SquareShape.containers = (self.drawable, self.solid,)
+        Player.containers = (self.drawable, self.updateable,)
 
     def game_loop(self):
         while self.playing:
             self.dt = 0
             self.get_events()
             self.update()
+            self.updateable.update(self.actions)
             self.render()
             self.dt = self.clock.tick(60) / 1000
 

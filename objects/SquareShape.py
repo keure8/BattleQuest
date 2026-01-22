@@ -22,7 +22,7 @@ class SquareShape(pygame.sprite.Sprite):
     def draw(self):
         self.game.game_canvas.blit(self.image, self.position)
 
-    def update(self):
+    def update(self, actions):
         # must override
         pass
 
