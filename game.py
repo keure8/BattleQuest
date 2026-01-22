@@ -2,12 +2,14 @@ import os, pygame
 from constants import *
 from states.title import Title
 from objects.SquareShape import SquareShape
+from objects.Player import Player
 
 class Game():
     def __init__(self):
         pygame.init()
         self.game_canvas = pygame.Surface((SCREEN_W, SCREEN_H))
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+        self.clock = pygame.time.Clock()
         self.running, self.playing = True, True
         self.actions = {"left": False, "right": False, "up": False, "down": False, "action1": False, "action2": False, "start": False}
         self.state_stack = []
@@ -16,12 +18,15 @@ class Game():
         self.load_states()
         self.drawable = pygame.sprite.Group()
         SquareShape.containers = (self.drawable,)
+        Player.containers = (self.drawable,)
 
     def game_loop(self):
         while self.playing:
+            self.dt = 0
             self.get_events()
             self.update()
             self.render()
+            self.dt = self.clock.tick(60) / 1000
 
     def get_events(self):
         for event in pygame.event.get():
