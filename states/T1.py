@@ -16,5 +16,5 @@ class T1(State):
 
     def render(self, display):
         display.fill((GREEN))
-        self.game.draw_grid()
+        self.draw_grid()
         

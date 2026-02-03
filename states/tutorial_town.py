@@ -16,7 +16,4 @@ class Tutorial_Town(State):
 
     def render(self, display):
         display.blit(self.T_Town_Img, (0,0))
-        self.game.draw_text(display, "Today is the day my child.", 15, BLACK, SCREEN_W/3, SCREEN_H/3)
-        self.game.draw_text(display, "Your quest to learn the ways of the world.", 15, BLACK, SCREEN_W/3, SCREEN_H/3+20)
-        self.game.draw_text(display, "Take this sword and hunt.", 15, BLACK, SCREEN_W/3, SCREEN_H/3+40)
-        self.game.draw_text(display, "Press Start To Continue", 10, WHITE, SCREEN_W/3, SCREEN_H/3+60)
+        self.pop_box("Hello World!", 20, WHITE, 400, 130, 150, 30)

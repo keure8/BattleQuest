@@ -101,12 +101,6 @@ class Game():
         for action in self.actions:
             self.actions[action] = False
 
-    def draw_grid(self):
-        #Draw vertical lines
-        for x in range(0, SCREEN_W, TILE_SIZE):
-            pygame.draw.line(self.game_canvas, BLACK, (x, 0), (x, SCREEN_H))
-        #Draw horizontal lines
-        for y in range(0, SCREEN_H, TILE_SIZE):
-            pygame.draw.line(self.game_canvas, BLACK, (0, y), (SCREEN_W, y))
+    
 
     
