@@ -1,8 +1,9 @@
-import os, pygame
+import os, pygame, random
 from constants import *
 from states.title import Title
 from objects.SquareShape import SquareShape
 from objects.Player import Player
+from objects.Enemy import Enemy
 
 class Game():
     def __init__(self):
@@ -88,6 +89,13 @@ class Game():
         text_rect.center = (x, y)
         surface.blit(text_surface, text_rect)
 
+    def pop_box(self, x, y, w, h):
+        pop_surface = pygame.Surface((w, h))
+        pop_rect = pop_surface.get_rect()
+        pop_rect.topleft = (x,y)
+        pop_surface.fill(BLACK)
+        return pop_surface
+
     def load_assets(self):
         # Create pointers to directories
         self.assets_dir = os.path.join("assets")
@@ -101,6 +109,6 @@ class Game():
         for action in self.actions:
             self.actions[action] = False
 
-    
-
-    
+    def roll_initiative(self, combatants):
+        for member in combatants:
+            member.initiative = random.randint(1,20)+ member.dex_mod

@@ -5,7 +5,10 @@ class State():
     def __init__(self, game):
         self.game = game
         self.prev_state = None
-
+        self.combatants = []
+        self.game.roll_initiative(self.combatants)
+        self.combatants.sort(key=lambda x: x.initiative, reverse=True)
+       
     def update(self, delta_time, actions):
         pass
     def render(self, surface):
@@ -27,15 +30,22 @@ class State():
         for y in range(0, SCREEN_H, TILE_SIZE):
             pygame.draw.line(self.game.game_canvas, BLACK, (0, y), (SCREEN_W, y))
 
-    def pop_box(self, message, size, color, x, y, w, h):
-        pop_surface = pygame.Surface((w, h))
-        pop_rect = pop_surface.get_rect()
-        pop_rect.topleft = (x,y)
-        pop_surface.fill(BLACK)
-        font = pygame.font.Font(self.game.font_name, size)
-        text_surface = font.render(message, True, color)
-        #text_surface.set_colorkey((0,0,0))
-        text_rect = text_surface.get_rect()
-        text_rect.topleft = (2, 2)
-        pop_surface.blit(text_surface, text_rect)
-        self.game.game_canvas.blit(pop_surface, pop_rect)
+    def draw_turn_box(self):
+        turn_box = self.game.pop_box(901, 1, 100, 750)
+        self.game.draw_text(turn_box, "Turn Order:", 10, WHITE, 50, 10)
+        y_offset = 30
+        for member in self.combatants:
+            self.game.draw_text(turn_box, member.name, 10, WHITE, 50, y_offset)
+            y_offset +=15
+        self.game.game_canvas.blit(turn_box, (901, 1))
+
+    def draw_action_box(self):
+        action_box = self.game.pop_box(1, 651, 1001, 100)
+        x_offset = 50
+        if self.current_turn.pc:
+            self.game.draw_text(action_box, self.current_turn.name, 10, WHITE, 50, 5)
+            self.game.draw_text(action_box, f"Health: {self.current_turn.current_health} / {self.current_turn.max_health}", 10, WHITE, 200, 5)
+            for item in self.current_turn.menu_buttons:
+                self.game.draw_text(action_box, str(item), 10, WHITE, x_offset, 25)
+                x_offset += 100
+        self.game.game_canvas.blit(action_box, (1, 651))

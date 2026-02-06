@@ -16,4 +16,6 @@ class Tutorial_Town(State):
 
     def render(self, display):
         display.blit(self.T_Town_Img, (0,0))
-        self.pop_box("Hello World!", 20, WHITE, 400, 130, 150, 30)
+        dad_dialog = self.game.pop_box(400, 130, 150, 30)
+        self.game.draw_text(dad_dialog, "Hello World!", 10, WHITE, 75, 15)
+        display.blit(dad_dialog, (400, 130))
