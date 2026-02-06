@@ -11,6 +11,11 @@ class Game():
         self.game_canvas = pygame.Surface((SCREEN_W, SCREEN_H))
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
         self.clock = pygame.time.Clock()
+        self.font_name = pygame.font.get_default_font()
+        self.FONTS = {
+            10: pygame.font.Font(self.font_name, 10),
+            20: pygame.font.Font(self.font_name, 20)
+        }
         self.running, self.playing = True, True
         self.actions = {"left": False, "right": False, "up": False, "down": False, "action1": False, "action2": False, "start": False}
         self.state_stack = []
@@ -82,7 +87,7 @@ class Game():
         pygame.display.flip()
     
     def draw_text(self, surface, text, size, color, x, y):
-        font = pygame.font.Font(self.font_name, size)
+        font = self.FONTS[size]
         text_surface = font.render(text, True, color)
         #text_surface.set_colorkey((0,0,0))
         text_rect = text_surface.get_rect()
@@ -99,7 +104,7 @@ class Game():
     def load_assets(self):
         # Create pointers to directories
         self.assets_dir = os.path.join("assets")
-        self.font_name = pygame.font.get_default_font()
+        
 
     def load_states(self):
         self.title_screen = Title(self)
