@@ -18,8 +18,8 @@ class T1(State):
         self.current_turn = self.combatants[turn_index]  
         
     def update(self, actions):
-        pass
-
+        self.player_turn()
+        
     def render(self, display):
         display.fill((GREEN))
         self.draw_grid()

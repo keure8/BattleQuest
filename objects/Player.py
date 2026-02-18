@@ -8,50 +8,66 @@ class Player(SquareShape):
 
         self.name = "Basic Player"
         self.pc = True
+        self.moving_mode = False
+        self.start_x, self.start_y = self.grid_x, self.grid_y
+        self.move_delay = 0
         self.max_health = 10
         self.current_health = 10
         self.dex_mod = 19
         self.initiative = 0
+        self.max_speed = 3
+        self.current_speed = 3
         self.menu_buttons = ["Move", "Actions", "Bonus Actions", "End Turn"]
         self.actions = ["attack"]      
             
     def update(self, actions):
-        self.move(actions)
         screen_x = self.grid_x * TILE_SIZE
         screen_y = self.grid_y * TILE_SIZE
         self.position = (screen_x, screen_y)
         self.rect.topleft = self.position
     
     def move(self, actions):
-        if actions["left"]:
-            if self.grid_x > 0:
-                self.grid_x -= 1
-                self.update_rect()
-                for object in self.game.solid:
-                    if self.rect.colliderect(object):
-                        self.grid_x += 1
-        if actions["right"]:
-            if self.grid_x < 17:
-                self.grid_x += 1
-                self.update_rect()
-                for object in self.game.solid:
-                    if self.rect.colliderect(object):
-                        self.grid_x -= 1
-        if actions["up"]:
-            if self.grid_y > 0:
-                self.grid_y -= 1
-                self.update_rect()
-                for object in self.game.solid:
-                    if self.rect.colliderect(object):
-                        self.grid_y += 1
-        if actions["down"]:
-            if self.grid_y < 12:
-                self.grid_y += 1
-                self.update_rect()
-                for object in self.game.solid:
-                    if self.rect.colliderect(object):
-                        self.grid_y -= 1
-        self.game.reset_keys()
+        if self.move_delay > 0:
+            self.move_delay -= 1
+            return
+        if actions["start"]:
+            self.start_x, self.start_y = self.grid_x, self.grid_y
+            self.moving_mode = False
+            self.game.reset_keys()
+            return
+        if actions["back"]:
+            # Reset to where we started the turn
+            self.grid_x, self.grid_y = self.start_x, self.start_y
+            self.update_rect()
+            self.current_speed = self.max_speed
+            self.moving_mode = False
+            self.game.reset_keys()
+            return
+        if self.current_speed > 0:
+            dx, dy = 0, 0
+            if actions["left"] and self.grid_x > 0:
+                dx = -1
+            elif actions["right"] and self.grid_x < 17:
+                dx = 1
+            elif actions["up"] and self.grid_y > 0:
+                dy = -1
+            elif actions["down"] and self.grid_y < 12:
+                dy = 1
+            if dx != 0 or dy != 0:
+                self.grid_x += dx
+                self.grid_y += dy
+                self.update_rect
+                self.current_speed -= 1
+
+                for obstacle in self.game.solid:
+                    if self.rect.colliderect(obstacle.rect):
+                        self.grid_x -= dx
+                        self.grid_y -= dy
+                        self.update_rect
+                        self.current_speed += 1
+                        break
+                self.move_delay = 10
+            
     
     def update_rect(self):
         self.rect.x = self.grid_x * TILE_SIZE

@@ -17,7 +17,7 @@ class Game():
             20: pygame.font.Font(self.font_name, 20)
         }
         self.running, self.playing = True, True
-        self.actions = {"left": False, "right": False, "up": False, "down": False, "action1": False, "action2": False, "start": False}
+        self.actions = {"left": False, "right": False, "up": False, "down": False, "back": False, "start": False}
         self.state_stack = []
         self.last_level = 0
         self.load_assets()
@@ -54,10 +54,8 @@ class Game():
                     self.actions['up'] = True
                 if event.key == pygame.K_s:
                     self.actions['down'] = True
-                if event.key == pygame.K_p:
-                    self.actions['action1'] = True
-                if event.key == pygame.K_o:
-                    self.actions['action2'] = True
+                if event.key == pygame.K_BACKSPACE:
+                    self.actions['back'] = True
                 if event.key == pygame.K_RETURN:
                     self.actions['start'] = True
             if event.type == pygame.KEYUP:
@@ -91,7 +89,7 @@ class Game():
         text_surface = font.render(text, True, color)
         #text_surface.set_colorkey((0,0,0))
         text_rect = text_surface.get_rect()
-        text_rect.center = (x, y)
+        text_rect.topleft = (x, y)
         surface.blit(text_surface, text_rect)
 
     def pop_box(self, x, y, w, h):
@@ -100,6 +98,9 @@ class Game():
         pop_rect.topleft = (x,y)
         pop_surface.fill(BLACK)
         return pop_surface
+    
+    def draw_cursor(self, surface, x, y):
+        self.draw_text(surface, "*", 20, YELLOW, x, y)
 
     def load_assets(self):
         # Create pointers to directories
