@@ -7,6 +7,7 @@ class State():
         self.game = game
         self.prev_state = None
         self.action_box = None
+        self.action_menu_state = "main"
         self.turn_box = None
         self.action_cursor_state = 0
         self.combatants = []
@@ -51,12 +52,17 @@ class State():
         x_offset = 25
         cursor_x_offset = 102
         if self.current_turn.pc:
-            self.game.draw_text(self.action_box, self.current_turn.name, 10, WHITE, 10, 5)
-            self.game.draw_text(self.action_box, f"Health: {self.current_turn.current_health} / {self.current_turn.max_health}", 10, WHITE, 100, 5)
-            self.game.draw_text(self.action_box, f"Speed: {self.current_turn.current_speed}", 10, WHITE, 200, 5)
-            for item in self.current_turn.menu_buttons:
-                self.game.draw_text(self.action_box, str(item), 10, WHITE, x_offset, 25)
-                x_offset += 100
+            if self.action_menu_state == "main":
+                self.game.draw_text(self.action_box, self.current_turn.name, 10, WHITE, 10, 5)
+                self.game.draw_text(self.action_box, f"Health: {self.current_turn.current_health} / {self.current_turn.max_health}", 10, WHITE, 100, 5)
+                self.game.draw_text(self.action_box, f"Speed: {self.current_turn.current_speed}", 10, WHITE, 200, 5)
+                for item in self.current_turn.menu_buttons:
+                    self.game.draw_text(self.action_box, str(item), 10, WHITE, x_offset, 25)
+                    x_offset += 100
+            if self.action_menu_state == "actions":
+                for item in self.current_turn.actions:
+                    self.game.draw_text(self.action_box, str(item), 10, WHITE, x_offset, 25)
+                    x_offset += 100
             self.game.draw_cursor(self.action_box, self.action_cursor_state*cursor_x_offset+5, 25)
         self.game.game_canvas.blit(self.action_box, (1, 651))
 
@@ -65,6 +71,8 @@ class State():
             return
         if self.current_turn.moving_mode:
             self.current_turn.move(self.game.actions)
+        elif self.current_turn.targeting_mode:
+            self.current_turn.attack(self.game.actions)
         else:
             if self.game.actions["right"]:
                 if self.action_cursor_state < len(self.combatants[self.turn_cursor_state].menu_buttons)-1:
@@ -75,6 +83,12 @@ class State():
                     self.action_cursor_state -= 1
                     self.game.reset_keys()
             if self.game.actions["start"]:
-                if self.action_cursor_state == 0:
+                if self.action_cursor_state == 0 and self.action_menu_state == "main":
                     self.current_turn.moving_mode = True
                     self.game.reset_keys()
+                if self.action_cursor_state == 1 and self.action_menu_state == "main":
+                    self.action_menu_state = "actions"
+                    self.action_cursor_state = 0
+                    self.game.reset_keys()
+                if self.action_cursor_state == 0 and self.action_menu_state == "actions":
+                    self.current_turn.targeting_mode = True

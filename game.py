@@ -4,6 +4,7 @@ from states.title import Title
 from objects.SquareShape import SquareShape
 from objects.Player import Player
 from objects.Enemy import Enemy
+from objects.HitBox import HitBox
 
 class Game():
     def __init__(self):
@@ -27,6 +28,7 @@ class Game():
         self.solid = pygame.sprite.Group()
         SquareShape.containers = (self.drawable, self.solid,)
         Player.containers = (self.drawable, self.updateable,)
+        HitBox.containers = (self.drawable, self.updateable,)
 
     def game_loop(self):
         while self.playing:

@@ -1,6 +1,7 @@
 import pygame
 from objects.SquareShape import SquareShape
 from constants import *
+from objects.HitBox import HitBox
 
 class Player(SquareShape):
     def __init__ (self, game, grid_x, grid_y, length, png):
@@ -9,6 +10,8 @@ class Player(SquareShape):
         self.name = "Basic Player"
         self.pc = True
         self.moving_mode = False
+        self.targeting_mode = False
+        self.target_indicator = None
         self.start_x, self.start_y = self.grid_x, self.grid_y
         self.move_delay = 0
         self.max_health = 10
@@ -18,7 +21,7 @@ class Player(SquareShape):
         self.max_speed = 3
         self.current_speed = 3
         self.menu_buttons = ["Move", "Actions", "Bonus Actions", "End Turn"]
-        self.actions = ["attack"]      
+        self.actions = ["Attack"]      
             
     def update(self, actions):
         screen_x = self.grid_x * TILE_SIZE
@@ -73,5 +76,18 @@ class Player(SquareShape):
         self.rect.x = self.grid_x * TILE_SIZE
         self.rect.y = self.grid_y * TILE_SIZE
 
-    def basic_attack(self, target):
-        target.get_hit(1)
+    def attack(self, actions):
+        if self.target_indicator is None:
+            self.target_indicator = HitBox(self.game, self.grid_x+1, self.grid_y, 50, 50)
+        if actions["up"] and self.target_indicator.grid_y >= self.grid_y:
+            self.target_indicator.grid_x = self.grid_x
+            self.target_indicator.grid_y = self.grid_y - 1
+        if actions["right"] and self.target_indicator.grid_x <= self.grid_x+1:
+            self.target_indicator.grid_x = self.grid_x+1
+            self.target_indicator.grid_y = self.grid_y
+        if actions["down"] and self.target_indicator.grid_y <= self.grid_y:
+            self.target_indicator.grid_x = self.grid_x
+            self.target_indicator.grid_y = self.grid_y+1
+        if actions["left"] and self.target_indicator.grid_x >= self.grid_x-1:
+            self.target_indicator.grid_x = self.grid_x-1
+            self.target_indicator.grid_y = self.grid_y
