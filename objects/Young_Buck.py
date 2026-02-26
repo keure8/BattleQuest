@@ -9,6 +9,7 @@ class Young_Buck(Enemy):
         
         self.name = "Young Buck"
         self.pc = False
-        self.health = 1
+        self.max_health = 1
+        self.current_health = self.max_health
         self.dex_mod = 1
         self.initiative = 0

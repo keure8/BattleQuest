@@ -34,3 +34,8 @@ class SquareShape(pygame.sprite.Sprite):
         except pygame.error as e:
             print(f"Error loading image: {e}")
             return None
+    
+    def get_hit(self, damage):
+        self.current_health -= damage
+        if self.current_health <= 0:
+            self.kill()

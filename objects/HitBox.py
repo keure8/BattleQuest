@@ -8,7 +8,7 @@ class HitBox(pygame.sprite.Sprite):
         self.game = game
 
         self.image = pygame.Surface((width, height), pygame.SRCALPHA)
-        self.image.fill((255, 0, 0, 150))
+        self.image.fill((255, 255, 0, 150))
         
         self.grid_x = grid_x
         self.grid_y = grid_y

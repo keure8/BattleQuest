@@ -72,7 +72,25 @@ class State():
         if self.current_turn.moving_mode:
             self.current_turn.move(self.game.actions)
         elif self.current_turn.targeting_mode:
-            self.current_turn.attack(self.game.actions)
+            self.current_turn.get_targets(self.game.actions)
+            if self.game.actions["start"]:
+                targets = []
+                for i in self.combatants:
+                    if self.current_turn.target_indicator.rect.colliderect(i):
+                        targets.append(i)
+                for target in targets:
+                    target.get_hit(1)
+                self.current_turn.target_indicator.kill()
+                self.game.reset_keys()
+                self.current_turn.targeting_mode = False
+                self.action_menu_state = "main"
+                self.action_cursor_state = 0
+            if self.game.actions["back"]:
+                self.game.reset_keys()
+                self.current_turn.target_indicator.kill()
+                self.current_turn.targeting_mode = False
+                self.action_menu_state = "main"
+                self.action_cursor_state = 0
         else:
             if self.game.actions["right"]:
                 if self.action_cursor_state < len(self.combatants[self.turn_cursor_state].menu_buttons)-1:

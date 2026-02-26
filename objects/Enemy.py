@@ -11,6 +11,3 @@ class Enemy(SquareShape):
         screen_y = self.grid_y * TILE_SIZE
         self.position = (screen_x, screen_y)
         self.rect.topleft = self.position
-
-    def get_hit(self, damage):
-        self.health -= damage
